@@ -46,6 +46,7 @@ namespace CMS.Controllers
         // GET: CourseSessionalTables/Create
         public IActionResult Create()
         {
+            ViewBag.CourseRegistrations = _context.CourseRegistrations.ToList();
             return View();
         }
 
@@ -78,6 +79,8 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.CourseRegistrations = _context.CourseRegistrations.ToList();
             return View(courseSessionalTable);
         }
 

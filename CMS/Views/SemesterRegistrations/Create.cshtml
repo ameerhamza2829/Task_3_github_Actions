@@ -14,9 +14,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="StudentID" class="control-label"></label>
-                <input asp-for="StudentID" class="form-control" />
+                <select asp-for="StudentID" class="form-control">
+                    <option value="">-- Select Student --</option>
+                    @foreach (var student in ViewBag.Students)
+                    {
+                        <option value="@student.Value">@student.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="StudentID" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="SemesterNumber" class="control-label"></label>
                 <input asp-for="SemesterNumber" class="form-control" />
@@ -24,7 +31,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="SessionID" class="control-label"></label>
-                <input asp-for="SessionID" class="form-control" />
+                <select asp-for="SessionID" class="form-control">
+                    <option value="">-- Select Session --</option>
+                    @foreach (var session in ViewBag.Sessions)
+                    {
+                        <option value="@session.Value">@session.Text</option>
+                    }
+                </select>                
                 <span asp-validation-for="SessionID" class="text-danger"></span>
             </div>
             <div class="form-group">

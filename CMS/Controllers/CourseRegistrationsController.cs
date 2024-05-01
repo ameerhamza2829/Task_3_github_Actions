@@ -46,8 +46,12 @@ namespace CMS.Controllers
         // GET: CourseRegistrations/Create
         public IActionResult Create()
         {
+            ViewBag.Courses = _context.Courses.ToList();
+            ViewBag.Sessions = _context.Sessions.ToList();
+            ViewBag.Teachers = _context.Teachers.ToList();
             return View();
         }
+
 
         // POST: CourseRegistrations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -78,8 +82,14 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Courses = _context.Courses.ToList();
+            ViewBag.Sessions = _context.Sessions.ToList();
+            ViewBag.Teachers = _context.Teachers.ToList();
+
             return View(courseRegistration);
         }
+
 
         // POST: CourseRegistrations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

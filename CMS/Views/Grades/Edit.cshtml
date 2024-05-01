@@ -15,7 +15,9 @@
             <input type="hidden" asp-for="GradeID" />
             <div class="form-group">
                 <label asp-for="SessionID" class="control-label"></label>
-                <input asp-for="SessionID" class="form-control" />
+                <select asp-for="SessionID" class="form-control" asp-items="@ViewBag.Sessions">
+                    <option value="">-- Select Session --</option>
+                </select>
                 <span asp-validation-for="SessionID" class="text-danger"></span>
             </div>
             <div class="form-group">

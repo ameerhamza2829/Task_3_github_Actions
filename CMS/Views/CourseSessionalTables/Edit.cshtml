@@ -15,7 +15,13 @@
             <input type="hidden" asp-for="SessionalID" />
             <div class="form-group">
                 <label asp-for="CourseRegistrationID" class="control-label"></label>
-                <input asp-for="CourseRegistrationID" class="form-control" />
+                <select asp-for="CourseRegistrationID" class="form-control">
+                    <option value="">-- Select Course Registration --</option>
+                    @foreach (var item in ViewBag.CourseRegistrations)
+                    {
+                        <option value="@item.CourseRegistrationID">@item.CourseRegistrationID</option>
+                    }
+                </select>
                 <span asp-validation-for="CourseRegistrationID" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -49,9 +49,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="DepartmentID" class="control-label"></label>
-                <input asp-for="DepartmentID" class="form-control" />
+                <select asp-for="DepartmentID" class="form-control">
+                    <option value="">-- Select Department --</option>
+                    @foreach (var department in ViewBag.Departments)
+                    {
+                        <option value="@department.Value">@department.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="DepartmentID" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

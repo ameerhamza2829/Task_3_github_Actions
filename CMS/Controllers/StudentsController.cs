@@ -46,6 +46,10 @@ namespace CMS.Controllers
         // GET: Students/Create
         public IActionResult Create()
         {
+            ViewBag.Batches = new SelectList(_context.Batches, "BatchID", "BatchName");
+            ViewBag.Campuses = new SelectList(_context.Campuses, "CampusID", "CampusName");
+            ViewBag.Sections = new SelectList(_context.Sections, "SectionID", "SectionName");
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentID", "DepartmentName");
             return View();
         }
 
@@ -78,6 +82,12 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Batches = new SelectList(_context.Batches, "BatchID", "BatchName", student.BatchID);
+            ViewBag.Campuses = new SelectList(_context.Campuses, "CampusID", "CampusName", student.CampusID);
+            ViewBag.Sections = new SelectList(_context.Sections, "SectionID", "SectionName", student.SectionID);
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", student.DepartmentID);
+
             return View(student);
         }
 

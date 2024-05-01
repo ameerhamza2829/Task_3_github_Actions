@@ -46,6 +46,7 @@ namespace CMS.Controllers
         // GET: Teachers/Create
         public IActionResult Create()
         {
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentID", "DepartmentName");
             return View();
         }
 
@@ -78,6 +79,8 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", teacher.DepartmentID);
             return View(teacher);
         }
 

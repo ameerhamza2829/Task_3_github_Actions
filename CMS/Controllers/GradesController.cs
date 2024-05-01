@@ -46,8 +46,10 @@ namespace CMS.Controllers
         // GET: Grades/Create
         public IActionResult Create()
         {
+            ViewBag.Sessions = new SelectList(_context.Sessions, "SessionID", "SessionName");
             return View();
         }
+
 
         // POST: Grades/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -65,7 +67,6 @@ namespace CMS.Controllers
             return View(grades);
         }
 
-        // GET: Grades/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,12 +74,14 @@ namespace CMS.Controllers
                 return NotFound();
             }
 
-            var grades = await _context.Grades.FindAsync(id);
-            if (grades == null)
+            var grade = await _context.Grades.FindAsync(id);
+            if (grade == null)
             {
                 return NotFound();
             }
-            return View(grades);
+
+            ViewBag.Sessions = new SelectList(_context.Sessions, "SessionID", "SessionName", grade.SessionID);
+            return View(grade);
         }
 
         // POST: Grades/Edit/5

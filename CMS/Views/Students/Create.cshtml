@@ -59,22 +59,46 @@
             </div>
             <div class="form-group">
                 <label asp-for="BatchID" class="control-label"></label>
-                <input asp-for="BatchID" class="form-control" />
+                <select asp-for="BatchID" class="form-control">
+                    <option value="">-- Select Batch --</option>
+                    @foreach (var batch in ViewBag.Batches)
+                    {
+                        <option value="@batch.Value">@batch.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="BatchID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CampusID" class="control-label"></label>
-                <input asp-for="CampusID" class="form-control" />
+                <select asp-for="CampusID" class="form-control">
+                    <option value="">-- Select Campus --</option>
+                    @foreach (var campus in ViewBag.Campuses)
+                    {
+                        <option value="@campus.Value">@campus.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="CampusID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SectionID" class="control-label"></label>
-                <input asp-for="SectionID" class="form-control" />
+                <select asp-for="SectionID" class="form-control">
+                    <option value="">-- Select Section --</option>
+                    @foreach (var s in ViewBag.Sections)
+                    {
+                        <option value="@s.Value">@s.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="SectionID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DepartmentID" class="control-label"></label>
-                <input asp-for="DepartmentID" class="form-control" />
+                <select asp-for="DepartmentID" class="form-control">
+                    <option value="">-- Select Department --</option>
+                    @foreach (var department in ViewBag.Departments)
+                    {
+                        <option value="@department.Value">@department.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="DepartmentID" class="text-danger"></span>
             </div>
             <div class="form-group">

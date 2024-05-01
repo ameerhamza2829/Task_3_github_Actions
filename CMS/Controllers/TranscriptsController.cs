@@ -46,6 +46,8 @@ namespace CMS.Controllers
         // GET: Transcripts/Create
         public IActionResult Create()
         {
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Courses = _context.Courses.ToList();
             return View();
         }
 
@@ -78,6 +80,8 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Courses = _context.Courses.ToList();
             return View(transcript);
         }
 

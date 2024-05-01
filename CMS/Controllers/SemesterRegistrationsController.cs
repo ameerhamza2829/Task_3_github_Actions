@@ -46,6 +46,8 @@ namespace CMS.Controllers
         // GET: SemesterRegistrations/Create
         public IActionResult Create()
         {
+            ViewData["Students"] = new SelectList(_context.Students, "StudentID", "FirstName");
+            ViewData["Sessions"] = new SelectList(_context.Sessions, "SessionID", "SessionName");
             return View();
         }
 
@@ -78,6 +80,10 @@ namespace CMS.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Students"] = new SelectList(_context.Students, "StudentID", "FirstName", semesterRegistration.StudentID);
+            ViewData["Sessions"] = new SelectList(_context.Sessions, "SessionID", "SessionName", semesterRegistration.SessionID);
+
             return View(semesterRegistration);
         }
 
