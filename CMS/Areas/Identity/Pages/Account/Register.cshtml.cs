@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CMS.Data;
 using CMS.Models;
+using CMS.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +28,7 @@ namespace CMS.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
@@ -41,7 +43,8 @@ namespace CMS.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +53,7 @@ namespace CMS.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -176,6 +180,12 @@ namespace CMS.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string role, string returnUrl = null)
         {
+            if (!_roleManager.RoleExistsAsync(SD.Role_Student).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Student)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Teacher)).GetAwaiter().GetResult();
+            }
             ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName");
             ViewData["Batches"] = new SelectList(_context.Batches, "BatchID", "BatchName");
             ViewData["Campuses"] = new SelectList(_context.Campuses, "CampusID", "CampusName");
@@ -230,6 +240,7 @@ namespace CMS.Areas.Identity.Pages.Account
                     // Populate Teacher or Student object based on selected role
                     if (role == "student")
                     {
+                        await _userManager.AddToRoleAsync(user, SD.Role_Student);
                         var student = new Student
                         {
                             RollNo = Input.StudentRollNo,
@@ -253,6 +264,7 @@ namespace CMS.Areas.Identity.Pages.Account
                     }
                     else if (role == "teacher")
                     {
+                        await _userManager.AddToRoleAsync(user, SD.Role_Teacher);
                         var teacher = new Teacher
                         {
                             TeacherCode = Input.TeacherCode,
@@ -267,6 +279,10 @@ namespace CMS.Areas.Identity.Pages.Account
                         };
 
                         _context.Teachers.Add(teacher);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.Role_Student);
                     }
                     await _context.SaveChangesAsync();
 
