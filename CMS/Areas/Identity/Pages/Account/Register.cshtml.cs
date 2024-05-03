@@ -222,6 +222,7 @@ namespace CMS.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                var userId = await _userManager.GetUserIdAsync(user);
 
                 if (result.Succeeded)
                 {
@@ -243,7 +244,8 @@ namespace CMS.Areas.Identity.Pages.Account
                             DepartmentID = Input.DepartmentId,
                             BatchID = Input.BatchId,
                             CampusID = Input.CampusId,
-                            SectionID = Input.SectionId
+                            SectionID = Input.SectionId,
+                            UserId = userId
                         };
 
                         _context.Students.Add(student);
@@ -260,14 +262,14 @@ namespace CMS.Areas.Identity.Pages.Account
                             Gender = Input.TeacherGender,
                             PhoneNo = Input.TeacherPhoneNo,
                             Email = Input.Email,
-                            DepartmentID = Input.DepartmentId
+                            DepartmentID = Input.DepartmentId,
+                            UserId = userId
                         };
 
                         _context.Teachers.Add(teacher);
                     }
                     await _context.SaveChangesAsync();
 
-                    var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

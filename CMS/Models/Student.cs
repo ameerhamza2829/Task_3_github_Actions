@@ -55,5 +55,9 @@ namespace CMS.Models
         [Required]
         [ForeignKey("Department")]
         public int DepartmentID { get; set; }
+
+        [Required]
+        [ForeignKey("AspNetUsers")]
+        public string UserId { get; set; }
     }
 }

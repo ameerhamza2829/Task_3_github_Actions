@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMS.Models
@@ -38,5 +39,9 @@ namespace CMS.Models
         [Required]
         [ForeignKey("Department")]
         public int DepartmentID { get; set; }
+
+        [Required]
+        [ForeignKey("AspNetUsers")]
+        public string UserId { get; set; }        
     }
 }
