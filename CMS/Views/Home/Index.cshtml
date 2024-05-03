@@ -1,8 +1,23 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using CMS.Utility
+
+@{
     ViewData["Title"] = "Home Page";
 }
+@inject UserManager<IdentityUser> UserManager
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (Context.User.Identity.IsAuthenticated)
+{
+    @if (User.IsInRole(SD.Role_Admin))
+    {
+        <script>window.location.href = '/AdminPanel';</script>
+    }
+    <div class="text-center">
+        <h1 class="display-4">Welcome <strong>@UserManager.GetUserName(User)</strong></h1>
+    </div>
+}
+else
+{
+    // Redirect to the login page
+    <script>window.location.href = 'Identity/Account/Login';</script>
+}

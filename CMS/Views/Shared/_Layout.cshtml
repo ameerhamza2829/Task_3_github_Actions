@@ -27,16 +27,17 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-door-fill fs-4"></i></a>
                         </li>
-                        @if (User.IsInRole(SD.Role_Admin))
+                        @* @if (User.IsInRole(SD.Role_Admin))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="AdminPanel" asp-action="Index"><i class="bi bi-gear-fill fs-4"></i></a>
                             </li>
-                        }
+                        } *@
                     </ul>
+                    <partial name="_loginpartial" />
+
                 </div>
             </div>
-            <partial name="_LoginPartial"/>
         </nav>
     </header>
     <div class="container mt-5">
