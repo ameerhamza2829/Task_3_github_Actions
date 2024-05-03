@@ -4,7 +4,8 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>@(ViewData["Title"] as string) a @((ViewBag.role == "teacher") ? "Teacher" : "Student")</h1>
+
 
 <div class="row">
     <div class="col-md-4">
@@ -27,41 +28,144 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <input asp-for="Input.Role" class="form-control" hidden value="@ViewBag.role" />
+
+            <!-- Student fields -->
+            <div id="student-fields">
+                @if(ViewBag.role == "student")
                 {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentRollNo" class="form-control" placeholder="Roll No" />
+                        <label asp-for="Input.StudentRollNo">Roll No</label>
+                        <span asp-validation-for="Input.StudentRollNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentFirstName" class="form-control" placeholder="First Name" />
+                        <label asp-for="Input.StudentFirstName">First Name</label>
+                        <span asp-validation-for="Input.StudentFirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentLastName" class="form-control" placeholder="Last Name" />
+                        <label asp-for="Input.StudentLastName">Last Name</label>
+                        <span asp-validation-for="Input.StudentLastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentAge" class="form-control" placeholder="Age" />
+                        <label asp-for="Input.StudentAge">Age</label>
+                        <span asp-validation-for="Input.StudentAge" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentGender" class="form-control" placeholder="Gender" />
+                        <label asp-for="Input.StudentGender">Gender</label>
+                        <span asp-validation-for="Input.StudentGender" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentCity" class="form-control" placeholder="City" />
+                        <label asp-for="Input.StudentCity">City</label>
+                        <span asp-validation-for="Input.StudentCity" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentCountry" class="form-control" placeholder="Country" />
+                        <label asp-for="Input.StudentCountry">Country</label>
+                        <span asp-validation-for="Input.StudentCountry" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentPhoneNo" class="form-control" placeholder="Phone No" />
+                        <label asp-for="Input.StudentPhoneNo">Phone No</label>
+                        <span asp-validation-for="Input.StudentPhoneNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.StudentAddress" class="form-control" placeholder="Address" />
+                        <label asp-for="Input.StudentAddress">Address</label>
+                        <span asp-validation-for="Input.StudentAddress" class="text-danger"></span>
+                    </div>
+                    <!-- Department select field -->
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.DepartmentId" class="form-control" asp-items="ViewBag.Departments">
+                            <option value="">Select Department</option>
+                        </select>
+                        <label asp-for="Input.DepartmentId"></label>
+                        <span asp-validation-for="Input.DepartmentId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Batch select field -->
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.BatchId" class="form-control" asp-items="ViewBag.Batches">
+                            <option value="">Select Batch</option>
+                        </select>
+                        <label asp-for="Input.BatchId"></label>
+                        <span asp-validation-for="Input.BatchId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campus select field -->
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.CampusId" class="form-control" asp-items="ViewBag.Campuses">
+                            <option value="">Select Campus</option>
+                        </select>
+                        <label asp-for="Input.CampusId"></label>
+                        <span asp-validation-for="Input.CampusId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Section select field -->
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.SectionId" class="form-control" asp-items="ViewBag.Sections">
+                            <option value="">Select Section</option>
+                        </select>
+                        <label asp-for="Input.SectionId"></label>
+                        <span asp-validation-for="Input.SectionId" class="text-danger"></span>
                     </div>
                 }
-                else
+            </div>
+            <!-- Teacher fields -->
+            <div id="teacher-fields">
+                @if(ViewBag.role == "teacher")
                 {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherCode" class="form-control" placeholder="Teacher Code" />
+                        <label asp-for="Input.TeacherCode">Teacher Code</label>
+                        <span asp-validation-for="Input.TeacherCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherFirstName" class="form-control" placeholder="First Name" />
+                        <label asp-for="Input.TeacherFirstName">First Name</label>
+                        <span asp-validation-for="Input.TeacherFirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherLastName" class="form-control" placeholder="Last Name" />
+                        <label asp-for="Input.TeacherLastName">Last Name</label>
+                        <span asp-validation-for="Input.TeacherLastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherAge" class="form-control" placeholder="Age" />
+                        <label asp-for="Input.TeacherAge">Age</label>
+                        <span asp-validation-for="Input.TeacherAge" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherGender" class="form-control" placeholder="Gender" />
+                        <label asp-for="Input.TeacherGender">Gender</label>
+                        <span asp-validation-for="Input.TeacherGender" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TeacherPhoneNo" class="form-control" placeholder="Phone No" />
+                        <label asp-for="Input.TeacherPhoneNo">Phone No</label>
+                        <span asp-validation-for="Input.TeacherPhoneNo" class="text-danger"></span>
+                    </div>                    
+                    <!-- Department select field -->
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.DepartmentId" class="form-control" asp-items="ViewBag.Departments">
+                            <option value="">Select Department</option>
+                        </select>
+                        <label asp-for="Input.DepartmentId"></label>
+                        <span asp-validation-for="Input.DepartmentId" class="text-danger"></span>
+                    </div>
                 }
-            }
-        </section>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @* <partial name="_ValidationScriptsPartial" /> *@   
 }
