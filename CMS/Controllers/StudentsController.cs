@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CMS.Data;
 using CMS.Models;
+using Microsoft.AspNetCore.Authorization;
+using CMS.Utility;
 
 namespace CMS.Controllers
 {
+    [Authorize(SD.Role_Admin)]
     public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
