@@ -224,6 +224,28 @@ namespace CMS.Areas.Identity.Pages.Account
                 ModelState.Remove("Input.SectionId");
                 ModelState.Remove("Input.CampusId");
             }
+            else
+            {
+                ModelState.Remove("Input.TeacherCode");
+                ModelState.Remove("Input.TeacherFirstName");
+                ModelState.Remove("Input.TeacherLastName");
+                ModelState.Remove("Input.TeacherGender");
+                ModelState.Remove("Input.TeacherPhoneNo");
+                ModelState.Remove("Input.StudentRollNo");
+                ModelState.Remove("Input.StudentFirstName");
+                ModelState.Remove("Input.StudentLastName");
+                ModelState.Remove("Input.StudentGender");
+                ModelState.Remove("Input.StudentPhoneNo");
+                ModelState.Remove("Input.StudentCity");
+                ModelState.Remove("Input.StudentCountry");
+                ModelState.Remove("Input.StudentPhoneNo");
+                ModelState.Remove("Input.StudentAddress");
+                ModelState.Remove("Input.BatchId");
+                ModelState.Remove("Input.SectionId");
+                ModelState.Remove("Input.CampusId");
+                ModelState.Remove("Input.Role");
+
+            }
             if (ModelState.IsValid)
             {
                 
@@ -282,7 +304,7 @@ namespace CMS.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Role_Student);
+                        await _userManager.AddToRoleAsync(user, SD.Role_Admin);
                     }
                     await _context.SaveChangesAsync();
 
