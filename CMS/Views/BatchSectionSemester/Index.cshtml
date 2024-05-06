@@ -1,0 +1,47 @@
+﻿@model List<CMS.ViewModels.StudentGroupViewModel>
+
+<h1>Grouped Students</h1>
+
+@foreach (var campusGroup in Model.GroupBy(m => m.CampusName))
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <h2>@campusGroup.Key</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach (var batchGroup in campusGroup.GroupBy(c => c.BatchName))
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3>@batchGroup.Key</h3>
+                            </div>
+                            <div class="card-body">
+                                @foreach (var sectionGroup in batchGroup.GroupBy(b => b.SectionName))
+                                {
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <h4>@sectionGroup.Key</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            @foreach (var student in sectionGroup.SelectMany(s => s.Students))
+                                            {
+                                                <div class="card mb-2">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@student.FirstName @student.LastName</h5>
+                                                        <p class="card-text">Roll No: @student.RollNo</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
