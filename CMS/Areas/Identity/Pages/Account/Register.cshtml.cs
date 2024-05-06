@@ -354,9 +354,9 @@ namespace CMS.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             //here i need to pass the role to the rendered page 
-            //return Page();
-            var returnUrlWithRole = Url.Page("/Account/Register", pageHandler: null, values: new { role = role });
-            return Redirect(returnUrlWithRole);
+            return Page();
+            //var returnUrlWithRole = Url.Page("/Account/Register", pageHandler: null, values: new { role = role });
+            //return Redirect(returnUrlWithRole);
         }
 
         private IdentityUser CreateUser()
