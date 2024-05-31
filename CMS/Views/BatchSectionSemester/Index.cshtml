@@ -25,15 +25,10 @@
                                             <h4>@sectionGroup.Key</h4>
                                         </div>
                                         <div class="card-body">
-                                            @foreach (var student in sectionGroup.SelectMany(s => s.Students))
-                                            {
-                                                <div class="card mb-2">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">@student.FirstName @student.LastName</h5>
-                                                        <p class="card-text">Roll No: @student.RollNo</p>
-                                                    </div>
-                                                </div>
-                                            }
+                                            <div class="d-flex gap-3">
+                                                <a href="@Url.Action("ViewStudents", "BatchSectionSemester", new { sectionId = sectionGroup.First().Students.First().SectionID, batchId = sectionGroup.First().Students.First().BatchID, campusId = sectionGroup.First().Students.First().CampusID })" class="btn btn-secondary">View Students</a>
+                                                <a href="#" class="btn btn-success">Promote to Next Semester</a>
+                                            </div>                                           
                                         </div>
                                     </div>
                                 }
