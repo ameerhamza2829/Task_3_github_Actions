@@ -1,22 +1,23 @@
-﻿@model CMS.ViewModels.StudentGroupViewModel
+﻿@model CMS.ViewModels.StudentsListViewModel
 
-<h1>Students in @Model.SectionName - @Model.BatchName, @Model.CampusName</h1>
+<div class="text-center">
+    <h1 class="display-6"><strong>@Model.BatchName - @Model.SectionName - @Model.DepartmentName - @Model.CampusName</strong></h1>
+</div>
+
 
 <table class="table">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
             <th>Roll No</th>
+            <th>Name</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var student in Model.Students)
         {
             <tr>
-                <td>@student.FirstName</td>
-                <td>@student.LastName</td>
                 <td>@student.RollNo</td>
+                <td>@student.FirstName  @student.LastName</td>
             </tr>
         }
     </tbody>

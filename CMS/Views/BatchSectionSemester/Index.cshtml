@@ -1,42 +1,49 @@
-﻿@model List<CMS.ViewModels.StudentGroupViewModel>
+﻿@model CMS.ViewModels.UniversityViewModel
 
-<h1>Grouped Students</h1>
-
-@foreach (var campusGroup in Model.GroupBy(m => m.CampusName))
+@foreach (var campus in Model.Campuses)
 {
     <div class="card mb-3">
         <div class="card-header">
-            <h2>@campusGroup.Key</h2>
+            <h2>@campus.CampusName</h2>
         </div>
         <div class="card-body">
-            <div class="row">
-                @foreach (var batchGroup in campusGroup.GroupBy(c => c.BatchName))
-                {
-                    <div class="col-md-4">
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h3>@batchGroup.Key</h3>
-                            </div>
-                            <div class="card-body">
-                                @foreach (var sectionGroup in batchGroup.GroupBy(b => b.SectionName))
-                                {
+            @foreach (var department in campus.Departments)
+            {
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>@department.DepartmentName</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (var batch in department.Batches)
+                            {
+                                <div class="col-md-4">
+                                    <!-- Adjust column width as needed -->
                                     <div class="card mb-3">
                                         <div class="card-header">
-                                            <h4>@sectionGroup.Key</h4>
+                                            <h4>@batch.BatchName</h4>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex gap-3">
-                                                <a href="@Url.Action("ViewStudents", "BatchSectionSemester", new { sectionId = sectionGroup.First().Students.First().SectionID, batchId = sectionGroup.First().Students.First().BatchID, campusId = sectionGroup.First().Students.First().CampusID })" class="btn btn-secondary">View Students</a>
-                                                <a href="#" class="btn btn-success">Promote to Next Semester</a>
-                                            </div>                                           
+                                            @foreach (var sec in batch.Sections)
+                                            {
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h5>@sec.SectionName</h5>                                                        
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <a class="btn btn-primary" href="@Url.Action("ViewStudents", "BatchSectionSemester", new { campusId = campus.CampusId, departmentId = department.DepartmentId, batchId = batch.BatchId, sectionId = sec.SectionId })">View Students</a>
+                                                        <a class="btn btn-success" href="#">Promote</a>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 }
