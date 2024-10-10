@@ -1,0 +1,57 @@
+name: .NET WorkFlow
+
+on:
+  push:
+    branches:
+      - main  # or the name of the branch you want to deploy from
+  pull_request:
+    branches:
+      - main  # or the name of the branch you want to deploy from
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.403'  # use the version you are targeting
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release
+
+    - name: Run tests
+      run: dotnet test --configuration Release
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to EC2
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # your SSH key secret
+        EC2_HOST: 54.242.196.151  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          cd /var/www/html/Task_3_github_Actions
+          # Pull the latest changes from GitHub
+          git pull origin main  # or your specific branch
+          # Remove existing publish directory if needed
+          rm -rf publish
+          # Publish the project
+          dotnet publish CMS/CMS.csproj --configuration Release --output publish
+          # Restart the application (assuming it's running using dotnet)
+          dotnet publish/publish/CMS.dll
+        EOF
