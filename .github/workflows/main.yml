@@ -39,7 +39,7 @@ jobs:
     - name: Deploy to EC2
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # your SSH key secret
-        EC2_HOST: 54.242.196.151  # Replace with your EC2 instance's IP
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
         EC2_USER: ubuntu  # your EC2 username
       run: |
         echo "$EC2_SSH_KEY" > ec2_key.pem
