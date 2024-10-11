@@ -69,10 +69,12 @@ jobs:
       run: |
         echo "$EC2_SSH_KEY" > ec2_key.pem
         chmod 600 ec2_key.pem
-        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST \
-          "cd /var/www/html/Task_3_github_Actions && \
-           git reset --hard HEAD && \
-           git pull origin main"
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          cd /var/www/html/Task_3_github_Actions
+          git reset --hard HEAD
+          git pull origin main
+        EOF
+
 
   remove-publish-folder:
     runs-on: ubuntu-latest
