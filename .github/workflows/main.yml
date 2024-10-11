@@ -71,8 +71,7 @@ jobs:
         chmod 600 ec2_key.pem
         ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST \
           "cd /var/www/html/Task_3_github_Actions && \
-           git add CMS/Areas/Identity/Pages/Account/Login.cshtml && \
-           git commit -m 'Save local changes to Login.cshtml' && \
+           git reset --hard HEAD && \
            git pull origin main"
 
   remove-publish-folder:
