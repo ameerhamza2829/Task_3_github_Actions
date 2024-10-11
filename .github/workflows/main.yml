@@ -1,4 +1,4 @@
-name: .NET WorkFlow
+name: .NET Workflow
 
 on:
   push:
@@ -29,29 +29,86 @@ jobs:
     - name: Run tests
       run: dotnet test --configuration Release
 
-  deploy:
+  ssh-into-ec2:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Deploy to EC2
+    - name: SSH into EC2
       env:
-        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # your SSH key secret
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
         EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
-        EC2_USER: ubuntu  # your EC2 username
+        EC2_USER: ubuntu  # Your EC2 username
       run: |
         echo "$EC2_SSH_KEY" > ec2_key.pem
         chmod 600 ec2_key.pem
-        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST << 'EOF'
-          cd /var/www/html/Task_3_github_Actions
-          # Pull the latest changes from GitHub
-          git pull origin main  # or your specific branch
-          # Remove existing publish directory if needed
-          rm -rf publish
-          # Publish the project
-          dotnet publish CMS/CMS.csproj --configuration Release --output publish
-          # Restart the application (assuming it's running using dotnet)
-          dotnet publish/publish/CMS.dll
-        EOF
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "echo 'Connected successfully'"
+
+  change-directory:
+    runs-on: ubuntu-latest
+    needs: ssh-into-ec2
+    steps:
+    - name: Change directory to project folder
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # Your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions && pwd"
+
+  git-pull:
+    runs-on: ubuntu-latest
+    needs: change-directory
+    steps:
+    - name: Git pull latest changes
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # Your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions && git pull origin main"
+
+  remove-publish-folder:
+    runs-on: ubuntu-latest
+    needs: git-pull
+    steps:
+    - name: Remove existing publish folder
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # Your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions && rm -rf publish"
+
+  dotnet-publish:
+    runs-on: ubuntu-latest
+    needs: remove-publish-folder
+    steps:
+    - name: Publish the .NET project
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # Your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions && dotnet publish CMS/CMS.csproj --configuration Release --output publish"
+
+  restart-application:
+    runs-on: ubuntu-latest
+    needs: dotnet-publish
+    steps:
+    - name: Restart the application
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}  # SSH key secret
+        EC2_HOST: 18.209.173.1  # Replace with your EC2 instance's IP
+        EC2_USER: ubuntu  # Your EC2 username
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions/publish && dotnet CMS.dll"
