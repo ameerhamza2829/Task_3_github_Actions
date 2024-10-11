@@ -117,4 +117,19 @@ jobs:
       run: |
         echo "$EC2_SSH_KEY" > ec2_key.pem
         chmod 600 ec2_key.pem
-        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST "cd /var/www/html/Task_3_github_Actions/publish && dotnet CMS.dll"
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          # Check if the application is running and get the PID
+          APP_PID=$(pgrep -f 'dotnet CMS.dll')
+
+          # If the application is running, kill it
+          if [ -n "$APP_PID" ]; then
+            echo "Stopping existing application with PID $APP_PID"
+            kill -9 $APP_PID
+          fi
+
+          # Navigate to the publish directory and start the application
+          cd /var/www/html/Task_3_github_Actions/publish
+          echo "Starting the application..."
+          nohup dotnet CMS.dll --urls "http://*:5000" &>/dev/null &
+          echo "Application started on port 5000"
+        EOF
