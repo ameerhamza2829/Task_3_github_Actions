@@ -72,6 +72,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ec2_key.pem $EC2_USER@$EC2_HOST << 'EOF'
           cd /var/www/html/Task_3_github_Actions
           git reset --hard HEAD
+          git config pull.rebase false
           git pull origin main
         EOF
 
